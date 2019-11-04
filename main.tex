@@ -1,0 +1,163 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage[margin=2.50cm]{geometry} % Makes the Margins not stupid
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cancel}
+
+\def\ct{\mathbf{c}_{\theta}}
+\def\st{\mathbf{s}_{\theta}}
+\def\sxx{S_{xx}}
+\def\sxy{S_{xy}}
+\def\sxz{S_{xz}}
+\def\syx{S_{yx}}
+\def\syy{S_{yy}}
+\def\syz{S_{yz}}
+\def\szx{S_{zx}}
+\def\szy{S_{zy}}
+\def\szz{S_{zz}}
+
+\begin{document}
+\title{Converting Tensors from Cartesian to Cylindrical}
+\maketitle
+
+From \url{http://solidmechanics.org/text/AppendixD/AppendixD.htm} we get:
+
+\begin{equation}
+    \begin{bmatrix}
+    S_{rr} & S_{r\theta} & S_{rz} \\
+    S_{\theta r} & S_{\theta\theta} & S_{\theta z} \\
+    S_{zr} & S_{\theta z} & S_{zz}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \cos \theta & \sin \theta & 0\\
+        -\sin \theta & \cos \theta & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+    S_{xx} & S_{xy} & S_{xz} \\
+    S_{yx} & S_{\theta\theta} & S_{\theta z} \\
+    S_{zr} & S_{\theta z} & S_{zz}
+    \end{bmatrix}
+    \begin{bmatrix}
+        \cos \theta & -\sin \theta & 0\\
+        \sin \theta & \cos \theta & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}
+\end{equation}
+
+Take the first two matrices and multiply them:
+
+Note: to ease space constraints, the following translations have been defined:
+
+\begin{align}
+    \cos \theta &= \ct \\
+    \sin \theta &= \st 
+\end{align}
+%
+\begin{multline}
+    \begin{bmatrix}
+        \cos \theta & \sin \theta & 0\\
+        -\sin \theta & \cos \theta & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}
+    \begin{bmatrix}
+    S_{xx} & S_{xy} & S_{xz} \\
+    S_{yx} & S_{\theta\theta} & S_{\theta z} \\
+    S_{zr} & S_{\theta z} & S_{zz}
+    \end{bmatrix}
+    \\
+    \Longrightarrow
+    \begin{bmatrix}
+        \ct\sxx + \st\syx + 0 & \ct\sxy + \st\syy + 0 & \ct\sxz + \st\syz + 0 \\
+        -\st\sxx + \ct\syx + 0 & -\st\sxy + \ct\syy + 0 & -\st\sxz + \ct\syz + 0 \\
+        0 + 0 + \szx & 0 + 0 + \szy & 0 + 0 + \szz
+    \end{bmatrix}
+    \\
+    \Longrightarrow
+    \begin{bmatrix}
+        \ct\sxx + \st\syx & \ct\sxy + \st\syy & \ct\sxz + \st\syz \\
+        -\st\sxx + \ct\syx & -\st\sxy + \ct\syy & -\st\sxz + \ct\syz \\
+        \szx & \szy & \szz
+    \end{bmatrix}
+\end{multline}
+
+Multiply the result by the third matrix:
+\begin{multline}
+    \begin{bmatrix}
+        \ct\sxx + \st\syx & \ct\sxy + \st\syy & \ct\sxz + \st\syz \\
+        -\st\sxx + \ct\syx & -\st\sxy + \ct\syy & -\st\sxz + \ct\syz \\
+        \szx & \szy & \szz
+    \end{bmatrix}
+    \begin{bmatrix}
+        \cos \theta & -\sin \theta & 0\\
+        \sin \theta & \cos \theta & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}
+    = 
+    \\
+    \begin{bmatrix}
+        \ct^2\sxx + \st\ct\syx + \ct\st\sxy + \st^2\syy & 
+        -\ct\st\sxx - \st^2\syx + \ct^2\sxy + \ct\st\syy & 
+        \ct\sxy + \st\syz \\
+        -\st\ct\sxx + \ct^2\syx - \st^2\sxy + \ct\st\syy & \st^2\sxx - \ct\st\syx - \ct\st\sxy + \ct^2\syy & -\st\sxz + \ct\syz \\
+        \ct\szx + \st\szy & -\st\szx + \ct\szy & \szz
+    \end{bmatrix}
+    \label{eq:something}
+\end{multline}
+
+Combine like terms, assuming that the tensor is symmetric (ie. \(S_{ij} = S_{ji}\)):
+
+\begin{equation}
+    (\ref{eq:something}) \Longrightarrow 
+    \begin{bmatrix}
+        \ct^2\sxx + 2\ct\st\sxy + \st^2\syy & 
+        -\ct\st\sxx + (\ct^2- \st^2)\sxy + \ct\st\syy & 
+        \ct\sxz + \st\syz \\
+        -\ct\st\sxx + (\ct^2 - \st^2)\sxy + \ct\st\syy & \st^2\sxx - 2\ct\st\sxy + \ct^2\syy & -\st\sxz + \ct\syz \\
+        \ct\sxz + \st\syz & -\st\sxz + \ct\syz & \szz
+    \end{bmatrix}
+\end{equation}
+
+This can be further simplified by combinging the \(\ct\st\) groups:
+
+\begin{equation}
+    \begin{bmatrix}
+    S_{rr} & S_{r\theta} & S_{rz} \\
+    S_{\theta r} & S_{\theta\theta} & S_{\theta z} \\
+    S_{zr} & S_{\theta z} & S_{zz}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        \ct^2\sxx + 2\ct\st\sxy + \st^2\syy & 
+        \ct\st(\syy-\sxx) + (\ct^2- \st^2)\sxy & 
+        \ct\sxz + \st\syz \\
+        \ct\st(\syy-\sxx) + (\ct^2- \st^2)\sxy & \st^2\sxx - 2\ct\st\sxy + \ct^2\syy & -\st\sxz + \ct\syz \\
+        \ct\sxz + \st\syz & -\st\sxz + \ct\syz & \szz
+    \end{bmatrix}
+\end{equation}
+
+To list off the unique components:
+
+\begin{align}
+        S_{rr} &= \ct^2\sxx + 2\ct\st\sxy + \st^2\syy \\
+        S_{r\theta} &= \ct\st(\syy-\sxx) + (\ct^2- \st^2)\sxy \\
+        S_{rz} &= \ct\sxz + \st\syz \\
+        S_{\theta\theta} &= \st^2\sxx - 2\ct\st\sxy + \ct^2\syy \\
+        S_{\theta z} &= -\st\sxz + \ct\syz \\
+        S_{zz} &= S_{zz}
+\end{align}
+
+%%* Result without the function definitions
+% \begin{align}
+%         S_{rr} &= \mathbf{c}_{\theta}^2S_{xx} + 2\mathbf{c}_{\theta}\mathbf{s}_{\theta}S_{xy} + \mathbf{s}_{\theta}^2S_{yy} \\
+%         S_{r\theta} &= \mathbf{c}_{\theta}\mathbf{s}_{\theta}(S_{yy}-S_{xx}) + (\mathbf{c}_{\theta}^2- \mathbf{s}_{\theta}^2)S_{xy} \\
+%         S_{rz} &= \mathbf{c}_{\theta}S_{xz} + \mathbf{s}_{\theta}S_{yz} \\
+%         S_{\theta\theta} &= \mathbf{s}_{\theta}^2S_{xx} - 2\mathbf{c}_{\theta}\mathbf{s}_{\theta}S_{xy} + \mathbf{c}_{\theta}^2S_{yy} \\
+%         S_{\theta z} &= -\mathbf{s}_{\theta}S_{xz} + \mathbf{c}_{\theta}S_{yz} \\
+%         S_{zz} &= S_{zz}
+% \end{align}
+
+\end{document}
