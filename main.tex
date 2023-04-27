@@ -19,6 +19,8 @@
 \def\szy{S_{zy}}
 \def\szz{S_{zz}}
 
+\author{James Wright}
+
 \begin{document}
 \title{Converting Tensors from Cartesian to Cylindrical}
 \maketitle
@@ -40,8 +42,8 @@ From \url{http://solidmechanics.org/text/AppendixD/AppendixD.htm} we get:
     \end{bmatrix}
     \begin{bmatrix}
     S_{xx} & S_{xy} & S_{xz} \\
-    S_{yx} & S_{\theta\theta} & S_{\theta z} \\
-    S_{zr} & S_{\theta z} & S_{zz}
+    S_{yx} & S_{yy} & S_{yz} \\
+    S_{zx} & S_{zy} & S_{zz}
     \end{bmatrix}
     \begin{bmatrix}
         \cos \theta & -\sin \theta & 0\\
@@ -67,8 +69,8 @@ Note: to ease space constraints, the following translations have been defined:
     \end{bmatrix}
     \begin{bmatrix}
     S_{xx} & S_{xy} & S_{xz} \\
-    S_{yx} & S_{\theta\theta} & S_{\theta z} \\
-    S_{zr} & S_{\theta z} & S_{zz}
+    S_{yx} & S_{yy} & S_{yz} \\
+    S_{zx} & S_{zy} & S_{zz}
     \end{bmatrix}
     \\
     \Longrightarrow
